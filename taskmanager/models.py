@@ -1,12 +1,12 @@
 
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager,PermissionsMixin
 from django.db import models
 import uuid
 
 class Role(models.TextChoices):
     USER = "USER", "User"
-    ADMIN = "MANAGER", "Manager"
-    SUPERADMIN = "SUPERUSER", "Superuser" 
+    ADMIN = "ADMIN", "ADMIN"
+    SUPERUSER = "SUPERUSER", "Superuser" 
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, password=None, **extra_fields):
@@ -20,20 +20,21 @@ class CustomUserManager(BaseUserManager):
     def create_superuser(self, username, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('role', Role.SUPERADMIN)
+        extra_fields.setdefault('role', Role.SUPERUSER)
 
         return self.create_user(username, password, **extra_fields)
 
 
 
-class CustomUser(AbstractBaseUser):
+class CustomUser(AbstractBaseUser,PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  
     username = models.CharField(max_length=30, unique=True, null=False, blank=False)
     password = models.CharField(max_length=30, null=False)
     role = models.CharField(max_length=30, choices=Role.choices, default=Role.USER)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    
+    is_superuser=models.BooleanField(default=False)
+
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
 

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Panel{% endblock %}
+
+{% block content %}
+
+<div class="admin-actions">
+    <ul style="list-style-type: none; padding: 0; display: flex; flex-direction: row; gap: 10px; margin: 20px;">
+        <li style="margin: 10px;">
+            <a href="#" class="mui-btn mui-btn--raised mui-btn--primary button-users" style="padding: 15px 20px;">Users</a>
+        </li>
+        <li style="margin: 10px;">
+            <a href="#" class="mui-btn mui-btn--raised mui-btn--primary button-admin" style="padding: 15px 20px;">Admin</a>
+        </li>
+    </ul>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Base button style with more specificity */
+    .admin-actions .button-users, .admin-actions .button-admin {
+        transition: all 0.3s ease-in-out;
+        padding: 15px 20px;
+        border-radius: 5px;
+        text-align: center;
+        display: inline-block;
+    }
+
+    /* Users button: blue color */
+    .admin-actions .button-users {
+        background-color: #007bff; /* Blue background */
+        color: white; /* White text */
+    }
+
+    .admin-actions .button-users:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+    }
+
+    .admin-actions .button-users:active {
+        background-color: #004085; /* Even darker blue on click */
+        transform: scale(0.98); /* Slight shrink effect */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Admin button: red color */
+    .admin-actions .button-admin {
+        background-color: #dc3545; /* Red background */
+        color: white; /* White text */
+    }
+
+    .admin-actions .button-admin:hover {
+        background-color: #c82333; /* Darker red on hover */
+    }
+
+    .admin-actions .button-admin:active {
+        background-color: #bd2130; /* Even darker red on click */
+        transform: scale(0.98); /* Slight shrink effect */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+</style>
+{% endblock %}

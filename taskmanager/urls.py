@@ -1,8 +1,8 @@
-# core/urls.py
 from django.urls import path
-from ..views import HelloAPIView, show_hello
+from taskmanager.views.usermanage_view import login_page,admin_panel,user_panel
 
 urlpatterns = [
-    path('api/hello/', HelloAPIView.as_view(), name='hello-api'),
-    path('hello-template/', show_hello, name='hello-template'),
+    path('login/', login_page, name='login_page'),
+    path('adminpanel/', admin_panel, name='admin_panel'),
+    path('userpanel/', user_panel, name='user_panel'),
 ]

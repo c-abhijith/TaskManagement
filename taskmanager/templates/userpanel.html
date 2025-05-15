@@ -1,0 +1,15 @@
+<!-- templates/userpanel.html -->
+{% extends "base.html" %}
+
+{% block title %}User Panel{% endblock %}
+
+{% block content %}
+<h2>Welcome to User Panel</h2>
+<p>Hello, {{ request.user.username }}!</p>
+
+<ul>
+    <li><a href="#">My Tasks</a></li>
+    <li><a href="#">Submit Report</a></li>
+    <li><a href="#">Logout</a></li>
+</ul>
+{% endblock %}
