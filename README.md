@@ -26,3 +26,17 @@ SETUP INSTRUCTIONS
 
 LoginUrl:http://127.0.0.1:8000/login/
 
+
+
+You can create a superuser using the following command:         
+
+            python manage.py createsuper
+    
+Alternatively, a superuser has already been created with the following credentials:
+
+
+            username : Superuser
+            password : Superuser@123
+
+
+Docker commands :  docker-compose up --build
