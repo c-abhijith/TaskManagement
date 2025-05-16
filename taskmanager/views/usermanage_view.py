@@ -42,7 +42,13 @@ def login_page(request):
 def admin_panel(request):
     if request.user.role not in [Role.ADMIN, Role.SUPERUSER]:
         return render(request, "login.html", {"error": "Not authorized"})
-
+    if request.user.role == Role.ADMIN:
+        # If the user is an admin, filter users to show only those assigned to them
+        assigned_user_ids = AssignedUser.objects.filter(admin=request.user).values_list('user_id', flat=True)
+        users = CustomUser.objects.filter(id__in=assigned_user_ids)
+        return render(request, "adminpanel.html", {
+        "users": users
+    })
     users = CustomUser.objects.filter(role=Role.USER)
     admins = CustomUser.objects.filter(role__in=[Role.ADMIN])
 
@@ -145,3 +151,32 @@ def assign_user_detail(request, admin_id):
         "admin": admin,
         "assigned_users": assigned_users
     })
+
+
+@login_required
+def task_list(request):
+    if request.user.role not in [Role.ADMIN, Role.SUPERUSER]:
+        return render(request, "login.html", {"error": "Unauthorized access"})
+
+    tasks = [
+        {
+            "title": "Design Homepage",
+            "assigned_to": "user_alice",
+            "status": "In Progress",
+            "due_date": "2024-08-01",
+        },
+        {
+            "title": "Fix Login Bug",
+            "assigned_to": "user_bob",
+            "status": "Pending",
+            "due_date": "2024-08-03",
+        },
+        {
+            "title": "Database Backup",
+            "assigned_to": "user_sarah",
+            "status": "Completed",
+            "due_date": "2024-07-28",
+        },
+    ]
+
+    return render(request, "task_details.html", {"tasks": tasks})

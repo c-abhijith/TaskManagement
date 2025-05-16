@@ -9,6 +9,7 @@
         Users
       </a>
     </li>
+    {% if request.user.role == 'SUPERUSER' %}
     <li>
       <a href="#" id="adminButton" class="mui-btn mui-btn--raised" style="background-color: red; color: white;">
         Admins
@@ -18,6 +19,13 @@
       <a href="{% url 'assign_user' %}" id="assignUserButton" class="mui-btn mui-btn--raised" style="background-color: orange; color: white;">
         Assign User
       </a>
+    </li>
+    {% endif %}
+     <li>
+      <a href="{% url 'task_list' %}" class="mui-btn mui-btn--raised" style="background-color: purple; color: white;">
+  Task Details
+</a>
+
     </li>
   </ul>
 </div>

@@ -55,13 +55,16 @@ class StatusChoices(models.TextChoices):
     PENDING = "Pending", "Pending"
     IN_PROGRESS = "In Progress", "In Progress"
     COMPLETED = "Completed", "Completed"
-
 class Task(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  
     title = models.CharField(max_length=255)
     description = models.TextField()
-    assigned_to = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    assigned_to = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='assigned_tasks')
+    created_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='created_tasks')
     due_date = models.DateField()
-    status = models.CharField(max_length=20, choices=StatusChoices, default=StatusChoices.PENDING)
+    status = models.CharField(max_length=20, choices=StatusChoices.choices, default=StatusChoices.PENDING)
     completion_report = models.TextField(blank=True, null=True)
     worked_hours = models.PositiveIntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return self.title
