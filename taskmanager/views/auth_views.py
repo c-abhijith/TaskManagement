@@ -7,7 +7,6 @@ from django.contrib import messages
 
 
 def login_page(request):
-    # If user is already logged in
     if request.user.is_authenticated:
         if request.user.role == Role.ADMIN or request.user.role == Role.SUPERUSER:
             return redirect('/adminpanel/')
@@ -39,7 +38,7 @@ def login_page(request):
 def custom_logout(request):
     logout(request)
     messages.success(request, "You have successfully logged out.")
-    return redirect('login_page')  # Replace with your login URL name
+    return redirect('login_page')  
 
 
 

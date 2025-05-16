@@ -7,7 +7,8 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-from taskmanager.views.user_management_views import CustomTokenObtainPairView
+from taskmanager.views.user_auth_views import CustomTokenObtainPairView
+from taskmanager.views.user_task_views import UserTaskListAPIView,CompleteTaskAPIView
 
 urlpatterns = [
     path('login/', login_page, name='login_page'),
@@ -25,7 +26,10 @@ urlpatterns = [
     path('assign/delete/<uuid:assignment_id>/',remove_user_in_admin, name='unassign_user'),
 
     #DRF
-    path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('user/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('user/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('user/tasks/', UserTaskListAPIView.as_view(), name='user_tasks'),
+    path('api/tasks/<uuid:id>/', CompleteTaskAPIView.as_view(), name='complete-task'),
+
 
 ]

@@ -82,7 +82,6 @@ def task_assign_user(request, task_id):
     if request.user.role != Role.ADMIN:
         return redirect('task_list')
 
-    # ✅ Only users assigned to the logged-in admin
     assigned_user_ids = AssignedUser.objects.filter(admin=request.user).values_list('user_id', flat=True)
     users = CustomUser.objects.filter(id__in=assigned_user_ids)
 
@@ -93,7 +92,7 @@ def task_assign_user(request, task_id):
         else:
             task.assigned_to = None
         task.save()
-        return redirect('task_list')  # 👈 Update as per your task list URL name
+        return redirect('task_list')  
 
     return render(request, "update_task_assignment.html", {
         "task": task,
