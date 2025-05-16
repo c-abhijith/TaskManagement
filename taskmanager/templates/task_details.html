@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block title %}Task Details{% endblock %}
 
 {% block content %}
@@ -27,7 +28,7 @@
       </label>
 
       {% if request.user.role == 'ADMIN' %}
-      <a href="{% url 'create_task' %}" class="mui-btn mui-btn--raised mui-btn--primary">➕ Create Task</a>
+      <a href="{% url 'create_task' %}" class="mui-btn mui-btn--raised mui-btn--primary">Create Task</a>
       {% endif %}
     </div>
   </div>
@@ -38,7 +39,8 @@
          data-status="{{ task.status|lower }}"
          data-assigned="{% if task.assigned_to %}assigned{% else %}none{% endif %}">
 
-      <h4>{{ task.title }}</h4>
+      <h4 class="task-title-centered">{{ task.title }}</h4>
+
       <p><strong>Assigned To:</strong> {{ task.assigned_to.username|default:"Not Assigned" }}</p>
       <p><strong>Created By:</strong> {{ task.created_by.username|default:"Unknown" }}</p>
 
@@ -54,8 +56,15 @@
 
       <p><strong>Due Date:</strong> {{ task.due_date }}</p>
 
+      <!-- Hidden fields for modal -->
+      <span class="completion-report" style="display: none;">{{ task.completion_report|default:"N/A" }}</span>
+      <span class="worked-hours" style="display: none;">{{ task.worked_hours|default:"0" }}</span>
+
       <div class="task-actions">
+        {% if task.status == "Completed" %}
         <a href="#" class="mui-btn mui-btn--small mui-btn--raised view-report-btn">View Report</a>
+        {% endif %}
+
         {% if request.user.role == 'ADMIN' %}
         <a href="{% url 'update_task_assignment' task.id %}" class="mui-btn mui-btn--small mui-btn--raised mui-btn--primary">Update</a>
         {% endif %}
@@ -68,8 +77,126 @@
   </div>
 
 </div>
+
+<!-- Modal HTML -->
+<div id="reportModal" class="modal-overlay" style="display: none;">
+  <div class="modal-content">
+    <span class="close-button" id="closeModal">&times;</span>
+    <h3 id="modalTitle">Task Title</h3>
+    <p><strong>Assigned To:</strong> <span id="modalAssigned" class="modal-value"></span></p>
+    <p><strong>Created By:</strong> <span id="modalCreated" class="modal-value"></span></p>
+    <p><strong>Status:</strong> <span id="modalStatus" class="modal-value"></span></p>
+    <p><strong>Due Date:</strong> <span id="modalDueDate" class="modal-value"></span></p>
+    <p><strong>Completion Report:</strong> <span id="modalReport" class="modal-highlight"></span></p>
+    <p><strong>Worked Hours:</strong> <span id="modalHours" class="modal-highlight"></span></p>
+  </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
 <script src="{% static 'js/task_filter.js' %}"></script>
+
+<style>
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Task title */
+.task-title-centered {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* Highlighted fields */
+.modal-value {
+  font-weight: bold;
+}
+
+.modal-highlight {
+  font-weight: bold;
+  background-color: #e0f7fa;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  color: #006064;
+}
+
+/* Green view report button */
+.view-report-btn {
+  background-color: #4CAF50 !important;
+  color: white !important;
+  border: none;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const modal = document.getElementById('reportModal');
+  const closeModal = document.getElementById('closeModal');
+
+  document.querySelectorAll('.view-report-btn').forEach(btn => {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+
+      const card = this.closest('.task-card');
+      const title = card.querySelector('h4').textContent;
+      const assigned = card.querySelectorAll('p')[0].textContent.replace("Assigned To:", "").trim();
+      const created = card.querySelectorAll('p')[1].textContent.replace("Created By:", "").trim();
+      const status = card.querySelectorAll('p')[2].querySelector('span').textContent.trim();
+      const dueDate = card.querySelectorAll('p')[3].textContent.replace("Due Date:", "").trim();
+      const report = card.querySelector('.completion-report')?.textContent.trim() || "N/A";
+      const hours = card.querySelector('.worked-hours')?.textContent.trim() || "0";
+
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalAssigned').textContent = assigned;
+      document.getElementById('modalCreated').textContent = created;
+      document.getElementById('modalStatus').textContent = status;
+      document.getElementById('modalDueDate').textContent = dueDate;
+      document.getElementById('modalReport').textContent = report;
+      document.getElementById('modalHours').textContent = hours;
+
+      modal.style.display = 'flex';
+    });
+  });
+
+  closeModal.addEventListener('click', function () {
+    modal.style.display = 'none';
+  });
+
+  modal.addEventListener('click', function (e) {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+});
+</script>
 {% endblock %}
