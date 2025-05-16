@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="assignUserSection" class="list-section" style="display: block; margin-top: 40px; font-family: 'Segoe UI', sans-serif; color: #2c3e50;">
+
+  <!-- Top Bar: Back + Create Button -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <a href="{% url 'admin_panel' %}" class="mui-btn mui-btn--raised"
+       style="display: flex; align-items: center; background-color: #ecf0f1; padding: 8px 12px; border-radius: 6px; font-size: 14px; color: #34495e; text-decoration: none;">
+      <span style="font-size: 16px; margin-right: 6px;">←</span> Back
+    </a>
+
+    <a href="{% url 'assign_user_create' %}" class="mui-btn mui-btn--raised"
+       style="background-color: #3498db; color: white; padding: 10px 16px; border-radius: 6px; font-size: 14px;">
+      + Create Assigned User
+    </a>
+  </div>
+
+  <h2 style="margin-bottom: 20px;">Assign Users to Admins</h2>
+
+  <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+    
+    <!-- Left: Assigned Admin Table -->
+    <div style="flex: 1 1 60%; min-width: 300px;">
+      <div style="background: #fafafa; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
+        <h4 style="margin-bottom: 15px;">Assigned Admins</h4>
+        <table class="mui-table mui-table--bordered" style="width: 100%; font-size: 14px;">
+          <thead style="background-color: #ecf0f1;">
+            <tr>
+              <th style="padding: 12px;">#</th>
+              <th style="padding: 12px;">Admin Name</th>
+              <th style="padding: 12px;">Assigned Users</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if assigned_admins %}
+              {% for item in assigned_admins %}
+              <tr>
+                <td style="padding: 12px;">{{ forloop.counter }}</td>
+                <td style="padding: 12px;">{{ item.admin.username }}</td>
+                <td style="padding: 12px;">{{ item.count }}</td>
+              </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="3" style="text-align: center; padding: 12px;">No assignments found.</td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Right: Unassigned Users List -->
+    <div style="flex: 1 1 35%; min-width: 200px;">
+      <div style="background: #fafafa; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); max-height: 400px; overflow-y: auto;">
+        <h4 style="margin-bottom: 15px;">Unassigned Users</h4>
+        <ul style="list-style: none; padding-left: 0; margin: 0;">
+          {% if unassigned_users %}
+            {% for user in unassigned_users %}
+              <li style="padding: 10px; border-bottom: 1px solid #ddd; cursor: pointer;">
+                {{ user.username }}
+              </li>
+            {% endfor %}
+          {% else %}
+            <li style="padding: 10px;">No unassigned users available.</li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

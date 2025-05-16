@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Assign User{% endblock %}
+
+{% block content %}
+<div style="max-width: 480px; margin: 60px auto; padding: 30px; background: #fff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    
+    <!-- Back Button -->
+    <a href="{% url 'assign_user' %}" class="mui-btn mui-btn--raised"
+       style="display: flex; align-items: center; background-color: #ecf0f1; padding: 8px 12px; border-radius: 6px; font-size: 14px; color: #34495e; text-decoration: none; transition: background 0.3s;"
+       onmouseover="this.style.backgroundColor='#d0d7de'" onmouseout="this.style.backgroundColor='#ecf0f1'">
+      <span style="font-size: 16px; margin-right: 6px;">←</span> Back
+    </a>
+  </div>
+    <h2 style="text-align: center; color: #333; margin-bottom: 25px;">Assign User to Admin</h2>
+    <form method="post" class="mui-form">
+        {% csrf_token %}
+
+        <div class="mui-textfield" style="margin-bottom: 20px;">
+            <label for="admin" style="font-weight: 500;">Select Admin</label>
+            <select name="admin" id="admin" class="mui-select" required style="width: 100%; padding: 10px; border-radius: 6px;">
+                <option value="" disabled selected>Select Admin</option>
+                {% for admin in admins %}
+                    <option value="{{ admin.id }}">{{ admin.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mui-textfield" style="margin-bottom: 30px;">
+            <label for="user" style="font-weight: 500;">Select User</label>
+            <select name="user" id="user" class="mui-select" required style="width: 100%; padding: 10px; border-radius: 6px;">
+                <option value="" disabled selected>Select User</option>
+                {% for user in unassigned_users %}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div style="text-align: center;">
+            <button type="submit" class="mui-btn mui-btn--raised mui-btn--primary" style="width: 100%; font-weight: bold; padding: 12px;">Assign</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
