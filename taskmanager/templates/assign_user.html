@@ -39,6 +39,11 @@
                 <td style="padding: 12px;">{{ forloop.counter }}</td>
                 <td style="padding: 12px;">{{ item.admin.username }}</td>
                 <td style="padding: 12px;">{{ item.count }}</td>
+                <td style="padding: 12px;">
+    <a href="{% url 'assign_user_detail' item.admin.id %}" class="mui-btn mui-btn--small mui-btn--primary">
+      View
+    </a>
+  </td>
               </tr>
               {% endfor %}
             {% else %}

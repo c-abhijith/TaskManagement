@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from taskmanager.models import Role, CustomUser,AssignedUser
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
@@ -134,3 +134,14 @@ def assign_user_create(request):
     return render(request, "create_assign_user.html", {
         "admins": admins,
         "unassigned_users": unassigned_users})
+
+@login_required
+def assign_user_detail(request, admin_id):
+    admin = get_object_or_404(CustomUser, id=admin_id, role=Role.ADMIN)
+
+    assigned_users = AssignedUser.objects.filter(admin=admin).select_related("user")
+
+    return render(request, "assign_details.html", {
+        "admin": admin,
+        "assigned_users": assigned_users
+    })

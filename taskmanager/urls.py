@@ -1,6 +1,6 @@
 from django.urls import path
 
-from taskmanager.views.usermanage_view import login_page,admin_panel,user_panel,create_user_view,custom_logout,assign_user,assign_user_create
+from taskmanager.views.usermanage_view import login_page,admin_panel,user_panel,create_user_view,custom_logout,assign_user,assign_user_create,assign_user_detail
 
 urlpatterns = [
     path('login/', login_page, name='login_page'),
@@ -10,5 +10,6 @@ urlpatterns = [
     path('logout/', custom_logout, name='logout'),
     path('assign-user/', assign_user, name='assign_user'),
     path("assign/create/", assign_user_create, name="assign_user_create"),
+    path("assign/details/<uuid:admin_id>/", assign_user_detail, name="assign_user_detail"),
 
 ]
