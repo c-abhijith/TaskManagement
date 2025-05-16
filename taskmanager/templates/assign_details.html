@@ -4,27 +4,22 @@
 {% block content %}
 <div style="max-width: 800px; margin: 40px auto;">
   
-  <!-- Top row: Back button, Admin Name, Create button -->
   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-    <!-- Smaller Back Button -->
     <a href="{% url 'assign_user' %}" class="mui-btn mui-btn--small mui-btn--raised" 
        style="padding: 6px 10px; font-size: 12px;">
       ← Back
     </a>
     
-    <!-- Bigger Admin Name -->
     <h2 style="margin: 0; font-size: 28px; font-weight: bold;">
       Admin Name: <span style="color: green;">{{ admin.username }}</span>
     </h2>
 
-    <!-- Smaller Create Button -->
     <a href="{% url 'assign_user_create' %}" class="mui-btn mui-btn--small mui-btn--raised"
        style="background-color: #3498db; color: white; padding: 6px 10px; font-size: 12px;">
       + Create
     </a>
   </div>
 
-  <!-- Table -->
   <table class="mui-table mui-table--bordered">
     <thead>
       <tr>
@@ -39,13 +34,14 @@
         <td>{{ forloop.counter }}</td>
         <td>{{ assignment.user.username }}</td>
         <td>
-          <form action="" method="post" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit" class="mui-btn mui-btn--small mui-btn--danger"
-                    style="padding: 4px 8px; font-size: 12px;">
-              Delete
-            </button>
-          </form>
+          <form action="{% url 'unassign_user' assignment.id %}" method="post" style="display:inline;" onsubmit="return confirmDelete();">
+  {% csrf_token %}
+  <button type="submit" class="mui-btn mui-btn--small mui-btn--danger"
+          style="padding: 4px 8px; font-size: 12px;">
+    Delete
+  </button>
+</form>
+
         </td>
       </tr>
       {% empty %}
@@ -57,4 +53,11 @@
   </table>
 
 </div>
+{% endblock %}
+{% block extra_js %}
+<script>
+  function confirmDelete() {
+    return confirm("Are you sure you want to unassign this user?");
+  }
+</script>
 {% endblock %}

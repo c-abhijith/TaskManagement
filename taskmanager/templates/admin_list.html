@@ -1,13 +1,10 @@
-<!-- templates/partials/admin_list.html -->
 <div id="adminList" class="list-section" style="margin-top: 40px;">
 
-    <!-- Header with title and create button -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h2 style="margin: 0; color: #2c3e50;">Admin Management</h2>
         <a href="{% url 'create_user' %}?role=ADMIN" class="mui-btn mui-btn--raised mui-btn--accent">➕ Create Admin</a>
     </div>
 
-    <!-- Card-like table container -->
     <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
         <table class="mui-table mui-table--bordered" style="width: 100%; border-collapse: collapse;">
             <thead style="background-color: #f2f2f2;">

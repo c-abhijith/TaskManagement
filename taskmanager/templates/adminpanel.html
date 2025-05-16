@@ -2,71 +2,34 @@
 {% block title %}Admin Panel{% endblock %}
 
 {% block content %}
-<div class="admin-actions" style="margin: 20px 0;">
-  <ul style="list-style: none; padding: 0; display: flex; gap: 10px;">
+<div class="admin-actions">
+  <ul class="action-buttons">
     <li>
-      <a href="#" id="usersButton" class="mui-btn mui-btn--raised" style="background-color: green; color: white;">
-        Users
-      </a>
+      <a href="#" id="usersButton" class="mui-btn mui-btn--raised users-btn">Users</a>
     </li>
     {% if request.user.role == 'SUPERUSER' %}
     <li>
-      <a href="#" id="adminButton" class="mui-btn mui-btn--raised" style="background-color: red; color: white;">
-        Admins
-      </a>
+      <a href="#" id="adminButton" class="mui-btn mui-btn--raised admins-btn">Admins</a>
     </li>
     <li>
-      <a href="{% url 'assign_user' %}" id="assignUserButton" class="mui-btn mui-btn--raised" style="background-color: orange; color: white;">
-        Assign User
-      </a>
+      <a href="{% url 'assign_user' %}" id="assignUserButton" class="mui-btn mui-btn--raised assign-btn">Assign User</a>
     </li>
     {% endif %}
-     <li>
-      <a href="{% url 'task_list' %}" class="mui-btn mui-btn--raised" style="background-color: purple; color: white;">
-  Task Details
-</a>
-
+    <li>
+      <a href="{% url 'task_list' %}" class="mui-btn mui-btn--raised task-btn">Task Details</a>
     </li>
   </ul>
 </div>
 
-<!-- Users List -->
-<div id="usersList" class="list-section" style="display: block;">
+<div id="usersList" class="list-section">
   {% include "user_list.html" %}
 </div>
 
-<!-- Admins List -->
 <div id="adminList" class="list-section" style="display: none;">
   {% include "admin_list.html" %}
 </div>
 {% endblock %}
 
 {% block extra_js %}
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const usersButton = document.getElementById('usersButton');
-    const adminButton = document.getElementById('adminButton');
-    const usersList = document.getElementById('usersList');
-    const adminList = document.getElementById('adminList');
-
-    usersButton.addEventListener('click', function(e) {
-      e.preventDefault();
-      usersList.style.display = 'block';
-      adminList.style.display = 'none';
-      usersButton.classList.add('mui-btn--accent');
-      adminButton.classList.remove('mui-btn--accent');
-    });
-
-    adminButton.addEventListener('click', function(e) {
-      e.preventDefault();
-      adminList.style.display = 'block';
-      usersList.style.display = 'none';
-      adminButton.classList.add('mui-btn--accent');
-      usersButton.classList.remove('mui-btn--accent');
-    });
-
-    // Initialize with Users active
-    usersButton.classList.add('mui-btn--accent');
-  });
-</script>
+<script src="{% static 'js/admin_panel.js' %}"></script>
 {% endblock %}

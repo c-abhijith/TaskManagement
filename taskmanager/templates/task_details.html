@@ -2,63 +2,67 @@
 {% block title %}Task Details{% endblock %}
 
 {% block content %}
-<div style="margin: 40px;">
-<!-- 📝 Header: Task Title + Back + Status Filter + Create Button -->
-<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; margin-bottom: 20px;">
+<div class="task-page">
 
-  <!-- Left: Back Button + Header -->
-  <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
-    <!-- 🔙 Back Button -->
-    <a href="{% url 'admin_panel' %}" class="mui-btn mui-btn--raised"
-       style="background-color: #ecf0f1; color: #34495e; padding: 8px 12px; border-radius: 6px; font-size: 14px; text-decoration: none;">
-      ← Back
-    </a>
-
-    <!-- Title -->
-    <h2 style="color: #2c3e50; margin: 0; font-weight: 700;">Task Details</h2>
-  </div>
-
-  <!-- Right: Status Filter + Create Task -->
-  <div style="display: flex; align-items: center; gap: 15px;">
-    <!-- Status Filter -->
-    <div>
-      <label for="statusFilter"><strong>Status:</strong></label>
-      <select id="statusFilter" class="mui-select"
-              style="margin-left: 10px; padding: 6px 12px; border-radius: 4px; border: 1px solid #ccc;">
-        <option value="All">All</option>
-        <option value="Pending">Pending</option>
-        <option value="In Progress">In Progress</option>
-        <option value="Completed">Completed</option>
-      </select>
+  <div class="task-header">
+    <div class="task-header-left">
+      <a href="{% url 'admin_panel' %}" class="mui-btn mui-btn--raised back-btn">← Back</a>
+      <h2 class="task-title">Task Details</h2>
     </div>
-    {% if request.user.role == 'ADMIN' %}
-    <!-- ➕ Create Task Button -->
-    <a href="#" class="mui-btn mui-btn--raised mui-btn--primary">➕ Create Task</a>
-    {% endif %}
+
+    <div class="task-header-right">
+      <div class="filter-group">
+        <label for="statusFilter"><strong>Status:</strong></label>
+        <select id="statusFilter" class="mui-select">
+          <option value="All">All</option>
+          <option value="Pending">Pending</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Completed">Completed</option>
+        </select>
+      </div>
+
+      <label class="checkbox-label">
+        <input type="checkbox" id="notAssignedOnly"> Show Not Assigned
+      </label>
+
+      {% if request.user.role == 'ADMIN' %}
+      <a href="{% url 'create_task' %}" class="mui-btn mui-btn--raised mui-btn--primary">➕ Create Task</a>
+      {% endif %}
+    </div>
   </div>
 
-</div>
-
-
-  <!-- 🧾 Task Cards -->
-  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+  <div class="task-grid">
     {% for task in tasks %}
-<div class="task-card" data-status="{{ task.status|lower }}" style="background: #fff; border-radius: 8px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); padding: 20px;">
+    <div class="task-card"
+         data-status="{{ task.status|lower }}"
+         data-assigned="{% if task.assigned_to %}assigned{% else %}none{% endif %}">
+
       <h4>{{ task.title }}</h4>
-      <p><strong>Assigned To:</strong> {{ task.assigned_to }}</p>
+      <p><strong>Assigned To:</strong> {{ task.assigned_to.username|default:"Not Assigned" }}</p>
+      <p><strong>Created By:</strong> {{ task.created_by.username|default:"Unknown" }}</p>
+
       <p><strong>Status:</strong>
         {% if task.status == "Pending" %}
-          <span style="color: #f39c12;">Pending</span>
+          <span class="status-pending">Pending</span>
         {% elif task.status == "In Progress" %}
-          <span style="color: #3498db;">In Progress</span>
+          <span class="status-inprogress">In Progress</span>
         {% elif task.status == "Completed" %}
-          <span style="color: #2ecc71;">Completed</span>
+          <span class="status-completed">Completed</span>
         {% endif %}
       </p>
+
       <p><strong>Due Date:</strong> {{ task.due_date }}</p>
+
+      <div class="task-actions">
+        <a href="#" class="mui-btn mui-btn--small mui-btn--raised view-report-btn">View Report</a>
+        {% if request.user.role == 'ADMIN' %}
+        <a href="{% url 'update_task_assignment' task.id %}" class="mui-btn mui-btn--small mui-btn--raised mui-btn--primary">Update</a>
+        {% endif %}
+      </div>
+
     </div>
     {% empty %}
-    <p style="grid-column: 1 / -1; text-align: center;">No tasks available.</p>
+    <p class="no-tasks-message">No tasks available.</p>
     {% endfor %}
   </div>
 
@@ -66,22 +70,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const filter = document.getElementById("statusFilter");
-    const cards = document.querySelectorAll(".task-card");
-
-    filter.addEventListener("change", function () {
-      const selected = this.value.toLowerCase();
-      cards.forEach(card => {
-        const status = card.getAttribute("data-status");
-        if (selected === "all" || selected === status) {
-          card.style.display = "block";
-        } else {
-          card.style.display = "none";
-        }
-      });
-    });
-  });
-</script>
+<script src="{% static 'js/task_filter.js' %}"></script>
 {% endblock %}

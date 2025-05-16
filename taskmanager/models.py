@@ -59,7 +59,7 @@ class Task(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  
     title = models.CharField(max_length=255)
     description = models.TextField()
-    assigned_to = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='assigned_tasks')
+    assigned_to = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='assigned_tasks',null=True,blank=True)
     created_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='created_tasks')
     due_date = models.DateField()
     status = models.CharField(max_length=20, choices=StatusChoices.choices, default=StatusChoices.PENDING)
@@ -68,3 +68,5 @@ class Task(models.Model):
 
     def __str__(self):
         return self.title
+
+

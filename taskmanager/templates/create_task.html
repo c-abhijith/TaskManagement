@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Create Task{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 40px auto;">
+
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h2>Create Task</h2>
+    <a href="" class="mui-btn mui-btn--raised" style="background-color: gray; color: white;">← Back</a>
+  </div>
+
+  <form method="post" class="mui-form">
+    {% csrf_token %}
+
+    <div class="mui-textfield mui-textfield--float-label">
+      <input type="text" name="title" required>
+      <label>Title</label>
+    </div>
+
+    <div class="mui-textfield mui-textfield--float-label">
+      <textarea name="description" required></textarea>
+      <label>Description</label>
+    </div>
+
+    <div class="mui-textfield mui-textfield--float-label">
+      <label>Assign To</label>
+      <select name="assigned_to" class="mui-select">
+        <option value="">-- Not Assigned --</option>
+        {% for user in users %}
+          <option value="{{ user.id }}">{{ user.username }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+   <div class="mui-textfield mui-textfield--float-label">
+  <input type="date" name="due_date" id="dueDate" required>
+  <label>Due Date</label>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById("dueDate").setAttribute('min', today);
+  });
+</script>
+
+
+    <button type="submit" class="mui-btn mui-btn--raised mui-btn--primary" style="margin-top: 20px;">Create Task</button>
+  </form>
+</div>
+{% endblock %}
