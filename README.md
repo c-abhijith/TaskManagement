@@ -30,7 +30,7 @@ LoginUrl:http://127.0.0.1:8000/login/
 
 You can create a superuser using the following command:         
 
-            python manage.py createsuper
+            python manage.py createsuperuser
     
 Alternatively, a superuser has already been created with the following credentials:
 
