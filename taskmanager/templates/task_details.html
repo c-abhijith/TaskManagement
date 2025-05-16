@@ -18,7 +18,7 @@
         <select id="statusFilter" class="mui-select">
           <option value="All">All</option>
           <option value="Pending">Pending</option>
-          <option value="In Progress">In Progress</option>
+          <option value="InProgress">In Progress</option>
           <option value="Completed">Completed</option>
         </select>
       </div>
@@ -47,7 +47,7 @@
       <p><strong>Status:</strong>
         {% if task.status == "Pending" %}
           <span class="status-pending">Pending</span>
-        {% elif task.status == "In Progress" %}
+        {% elif task.status == "InProgress" %}
           <span class="status-inprogress">In Progress</span>
         {% elif task.status == "Completed" %}
           <span class="status-completed">Completed</span>

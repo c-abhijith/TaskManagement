@@ -35,12 +35,17 @@ def user_panel(request):
 
 @login_required
 def create_user_view(request):
+    if request.user.role not in [Role.SUPERUSER]:
+        return render(request, "login.html", {"error": "Not authorized"})
     role = request.GET.get("role", Role.USER) 
+    
 
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
         selected_role = request.POST.get("role")
+        if CustomUser.objects.filter(username=username).exists():
+            return render(request, "create_user.html", {"error": "Username already exists."})
 
         if username and password and selected_role:
             CustomUser.objects.create(

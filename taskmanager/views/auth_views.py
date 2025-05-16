@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from taskmanager.models import Role,Task
+from taskmanager.models import Role
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
@@ -25,7 +25,7 @@ def login_page(request):
             if user.role == Role.ADMIN or user.role == Role.SUPERUSER:
                 return redirect('/adminpanel/')
             elif user.role == Role.USER:
-                return redirect('/userpanel/')
+                return render(request, "login.html")
             else:
                 return render(request, "login.html", {"error": "Unknown role!"})
         else:
@@ -41,14 +41,4 @@ def custom_logout(request):
     return redirect('login_page')  
 
 
-
-
-@login_required
-def task_list(request):
-    if request.user.role not in [Role.ADMIN, Role.SUPERUSER]:
-        return render(request, "login.html", {"error": "Unauthorized access"})
-
-    tasks = Task.objects.all().select_related('assigned_to')
-
-    return render(request, "task_details.html", {"tasks": tasks})
 

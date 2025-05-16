@@ -3,7 +3,7 @@
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h2 style="margin: 0; color: #2c3e50;">User Management</h2>
         {% if request.user.role == 'SUPERUSER' %}
-        <a href="{% url 'create_user' %}?role=USER" class="mui-btn mui-btn--raised mui-btn--accent">➕ Create User</a>
+        <a href="{% url 'create_user' %}?role=USER" class="mui-btn mui-btn--raised mui-btn--accent">Create User</a>
         {% endif %}
     </div>
 

@@ -1,11 +1,26 @@
 from django.shortcuts import render, redirect
 from taskmanager.models import CustomUser,Task
 from django.contrib.auth.decorators import login_required
+from taskmanager.models import Role,Task,AssignedUser
+
+
+
+
+@login_required
+def task_list(request):
+    if request.user.role not in [Role.ADMIN, Role.SUPERUSER]:
+        return render(request, "login.html", {"error": "Unauthorized access"})
+
+    tasks = Task.objects.all().select_related('assigned_to')
+
+    return render(request, "task_details.html", {"tasks": tasks})
+
 
 
 @login_required
 def create_task(request):
-    users = CustomUser.objects.filter(role="USER") 
+    assigned_users = AssignedUser.objects.filter(admin=request.user).values_list('user', flat=True)
+    users = CustomUser.objects.filter(id__in=assigned_users, role="USER") 
     if request.method == "POST":
         title = request.POST.get("title")
         description = request.POST.get("description")

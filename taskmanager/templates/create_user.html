@@ -31,5 +31,8 @@
     {% if message %}
     <p style="color: green; text-align: center;">{{ message }}</p>
     {% endif %}
+     {% if error %}
+    <p style="color: red; text-align: center; margin-top: 15px;">{{ error }}</p>
+    {% endif %}
 </div>
 {% endblock %}

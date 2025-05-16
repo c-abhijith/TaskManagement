@@ -69,3 +69,26 @@ class CompleteTaskAPIView(APIView):
                 {"detail": "Something went wrong.", "error": str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+    def patch(self, request, id):
+        try:
+            if request.user.role != "USER":
+                return Response(
+                    {"detail": "You do not have permission to view this."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            
+            task = get_object_or_404(Task, id=id)
+            task.status = "InProgress"
+            task.save()
+            
+            print(task.status)
+            return Response(
+                {"message": "Task updated successfully."},
+                status=status.HTTP_200_OK
+            )
+            
+        except Exception as e:
+            return Response(
+                {"detail": "Something went wrong.", "error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

@@ -1,8 +1,8 @@
 from django.urls import path
-from taskmanager.views.auth_views import login_page,custom_logout,task_list
+from taskmanager.views.auth_views import login_page,custom_logout
 from taskmanager.views.dashboard_views import admin_panel,user_panel,create_user_view
 from taskmanager.views.task_assign_views import assign_user,assign_user_create,assign_user_detail,change_assigned_user,remove_user_in_admin,task_assign_user
-from taskmanager.views.task_views import create_task
+from taskmanager.views.task_views import create_task,task_list
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -29,7 +29,7 @@ urlpatterns = [
     path('user/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('user/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('user/tasks/', UserTaskListAPIView.as_view(), name='user_tasks'),
-    path('api/tasks/<uuid:id>/', CompleteTaskAPIView.as_view(), name='complete-task'),
+    path('user/tasks/<uuid:id>/', CompleteTaskAPIView.as_view(), name='complete-task'),
 
 
 ]

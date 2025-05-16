@@ -53,7 +53,7 @@ class AssignedUser(models.Model):
     
 class StatusChoices(models.TextChoices):
     PENDING = "Pending", "Pending"
-    IN_PROGRESS = "In Progress", "In Progress"
+    IN_PROGRESS = "InProgress", "InProgress"
     COMPLETED = "Completed", "Completed"
 class Task(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  
