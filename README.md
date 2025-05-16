@@ -1,5 +1,5 @@
 Django Project with DRF & Template Rendering
-This project integrates Djang
+This project integrates Django
 
 This project integrates Django REST Framework (DRF) and traditional template rendering. You can access the login page via a browser, or interact with the API using Postman.
 
