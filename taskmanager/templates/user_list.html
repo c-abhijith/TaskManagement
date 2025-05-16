@@ -1,0 +1,35 @@
+<div id="usersList" class="list-section" style="margin-top: 40px;">
+
+    <!-- Header with title and create button -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="margin: 0; color: #2c3e50;">User Management</h2>
+        <a href="{% url 'create_user' %}?role=USER" class="mui-btn mui-btn--raised mui-btn--accent">➕ Create User</a>
+    </div>
+
+    <!-- Card-like table container -->
+    <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+        <table class="mui-table mui-table--bordered" style="width: 100%; border-collapse: collapse;">
+            <thead style="background-color: #f2f2f2;">
+                <tr style="text-align: left;">
+                    <th style="padding: 12px;">#</th>
+                    <th style="padding: 12px;">User Name</th>
+                </tr>
+            </thead>
+            {{user}}
+            <tbody>
+                {% if users %}
+                    {% for user in users %}
+                    <tr>
+                        <td style="padding: 12px;">{{ forloop.counter }}</td>
+                        <td style="padding: 12px;">{{ user.username }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="2" style="padding: 12px; text-align: center;">No users found.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>

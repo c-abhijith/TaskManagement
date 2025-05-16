@@ -1,0 +1,35 @@
+<!-- templates/create_user.html -->
+{% extends "base.html" %}
+{% block title %}Create User{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 40px auto;">
+    <h2 style="text-align: center;">Create {{ role|capfirst }}</h2>
+    <form method="post" class="mui-form" style="padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+        {% csrf_token %}
+
+        <div class="mui-textfield mui-textfield--float-label">
+            <input type="text" name="username" required>
+            <label>Username</label>
+        </div>
+
+        <div class="mui-textfield mui-textfield--float-label">
+            <input type="password" name="password" required>
+            <label>Password</label>
+        </div>
+
+        <div class="mui-textfield mui-textfield--float-label">
+            <input type="text" name="role" value="{{ role }}" readonly>
+            <label>Role</label>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <button type="submit" class="mui-btn mui-btn--raised mui-btn--primary">Create {{ role|capfirst }}</button>
+        </div>
+    </form>
+
+    {% if message %}
+    <p style="color: green; text-align: center;">{{ message }}</p>
+    {% endif %}
+</div>
+{% endblock %}
