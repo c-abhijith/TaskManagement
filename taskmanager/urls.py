@@ -3,6 +3,11 @@ from taskmanager.views.auth_views import login_page,custom_logout,task_list
 from taskmanager.views.dashboard_views import admin_panel,user_panel,create_user_view
 from taskmanager.views.task_assign_views import assign_user,assign_user_create,assign_user_detail,change_assigned_user,remove_user_in_admin,task_assign_user
 from taskmanager.views.task_views import create_task
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+from taskmanager.views.user_management_views import CustomTokenObtainPairView
 
 urlpatterns = [
     path('login/', login_page, name='login_page'),
@@ -19,5 +24,8 @@ urlpatterns = [
     path("adminpanel/tasks/change-user/<uuid:task_id>/", change_assigned_user, name="change_assigned_user"),
     path('assign/delete/<uuid:assignment_id>/',remove_user_in_admin, name='unassign_user'),
 
+    #DRF
+    path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
 ]
